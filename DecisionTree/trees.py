@@ -85,6 +85,31 @@ def createTree(dataSet, labels):
     return myTree
 
 
+def classify(inputTree, featLabels, testVec):
+    firstStr = list(inputTree.keys())[0]
+    secondDict = inputTree[firstStr]
+    featIndex = featLabels.index(firstStr)
+    key = testVec[featIndex]
+    valueOfFeat = secondDict[key]
+    if isinstance(valueOfFeat, dict):
+        classLabel = classify(valueOfFeat, featLabels, testVec)
+    else:
+        classLabel = valueOfFeat
+    return classLabel
+
+
+def storeTree(inputTree, filename):
+    import pickle
+    with open(filename, 'w') as fw:
+        pickle.dump(inputTree, fw)
+
+
+def grabTree(filename):
+    import pickle
+    with open(filename, 'r') as fr:
+        return pickle.load(fr)
+
+
 def main():
     dataSet, labels = createDataSet()
     #shannonEnt = calcShannonEnt(dataSet)
